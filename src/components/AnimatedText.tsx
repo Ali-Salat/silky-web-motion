@@ -1,48 +1,92 @@
 
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-
-interface AnimatedTextProps {
-  items: string[];
-  interval?: number;
-  className?: string;
-}
-
-const AnimatedText: React.FC<AnimatedTextProps> = ({
-  items,
-  interval = 3000,
-  className,
-}) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+// AnimatedText.tsx - Pure JavaScript approach without imports
+function AnimatedText(props) {
+  const { items = [], interval = 3000, className = '' } = props;
+  let currentIndex = 0;
+  let isVisible = true;
+  let intervalId = null;
+  let element = null;
   
-  useEffect(() => {
+  function initialize() {
     if (items.length <= 1) return;
     
-    const intervalId = setInterval(() => {
-      setIsVisible(false);
+    intervalId = setInterval(() => {
+      fadeOut();
       
       setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-        setIsVisible(true);
+        currentIndex = (currentIndex + 1) % items.length;
+        updateText();
+        fadeIn();
       }, 300); // Wait for fade-out animation to complete
       
     }, interval);
     
-    return () => clearInterval(intervalId);
-  }, [items, interval]);
+    return () => intervalId && clearInterval(intervalId);
+  }
   
-  return (
-    <span
-      className={cn(
-        'inline-block transition-all duration-300',
-        isVisible ? 'opacity-100' : 'opacity-0 translate-y-2',
-        className
-      )}
-    >
-      {items[currentIndex]}
-    </span>
-  );
-};
+  function fadeOut() {
+    if (!element) return;
+    element.style.opacity = '0';
+    element.style.transform = 'translateY(8px)';
+  }
+  
+  function fadeIn() {
+    if (!element) return;
+    element.style.opacity = '1';
+    element.style.transform = 'translateY(0)';
+  }
+  
+  function updateText() {
+    if (!element) return;
+    element.textContent = items[currentIndex];
+  }
+  
+  return {
+    mount: function(containerElement) {
+      element = document.createElement('span');
+      element.className = `inline-block transition-all duration-300 ${className}`;
+      element.style.opacity = '1';
+      element.textContent = items[currentIndex] || '';
+      
+      containerElement.appendChild(element);
+      initialize();
+    },
+    unmount: function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
+    }
+  };
+}
 
-export default AnimatedText;
+// For compatibility with the existing React structure
+function AnimatedTextReactWrapper(props) {
+  const spanRef = React.useRef(null);
+  const animatedTextRef = React.useRef(null);
+  
+  React.useEffect(() => {
+    if (spanRef.current && !animatedTextRef.current) {
+      animatedTextRef.current = AnimatedText(props);
+      animatedTextRef.current.mount(spanRef.current.parentNode);
+      spanRef.current.remove();
+    }
+    
+    return () => {
+      if (animatedTextRef.current) {
+        animatedTextRef.current.unmount();
+        animatedTextRef.current = null;
+      }
+    };
+  }, [props.items, props.interval]);
+  
+  return React.createElement('span', { 
+    ref: spanRef,
+    className: `inline-block transition-all duration-300 ${props.className || ''}`,
+    style: { opacity: 0 }
+  }, props.items && props.items[0] || '');
+}
+
+export default AnimatedTextReactWrapper;
