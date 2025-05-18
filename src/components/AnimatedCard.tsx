@@ -1,130 +1,104 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-// AnimatedCard.tsx - Pure JavaScript approach with minimal React imports
-function AnimatedCard(props) {
-  const { 
-    title = '',
-    description = '',
-    icon = null,
-    className = '',
-    onClick = () => {}
-  } = props;
+type AnimatedCardProps = {
+  title?: string;
+  description?: string;
+  icon?: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+};
+
+const AnimatedCard: React.FC<AnimatedCardProps> = ({
+  title = '',
+  description = '',
+  icon = null,
+  className = '',
+  onClick = () => {}
+}) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   
-  let isHovered = false;
-  let element = null;
-  let titleElement = null;
-  let progressBar = null;
-  let iconContainer = null;
-  
-  function handleMouseEnter() {
-    if (!element) return;
-    isHovered = true;
-    element.classList.add('shadow-lg', 'border-primary/20');
+  useEffect(() => {
+    if (!containerRef.current) return;
     
-    if (titleElement) {
-      titleElement.classList.add('gradient-text');
-    }
+    const element = containerRef.current;
+    let titleElement: HTMLHeadingElement | null = null;
+    let progressBar: HTMLDivElement | null = null;
+    let iconContainer: HTMLDivElement | null = null;
     
-    if (progressBar) {
-      progressBar.style.width = '100%';
-    }
+    // Find elements
+    titleElement = element.querySelector('h3');
+    progressBar = element.querySelector('.progress-bar');
+    iconContainer = element.querySelector('.icon-container');
     
-    if (iconContainer) {
-      iconContainer.style.transform = 'scale(1.1)';
-    }
-  }
-  
-  function handleMouseLeave() {
-    if (!element) return;
-    isHovered = false;
-    element.classList.remove('shadow-lg', 'border-primary/20');
-    
-    if (titleElement) {
-      titleElement.classList.remove('gradient-text');
-    }
-    
-    if (progressBar) {
-      progressBar.style.width = '0';
-    }
-    
-    if (iconContainer) {
-      iconContainer.style.transform = 'scale(1)';
-    }
-  }
-  
-  return {
-    mount: function(containerElement) {
-      element = document.createElement('div');
-      element.className = `group p-6 rounded-lg border bg-card text-card-foreground shadow transition-all duration-300 hover-lift cursor-pointer ${className}`;
-      element.addEventListener('mouseenter', handleMouseEnter);
-      element.addEventListener('mouseleave', handleMouseLeave);
-      element.addEventListener('click', onClick);
+    // Event handlers
+    const handleMouseEnter = () => {
+      element.classList.add('shadow-lg', 'border-primary/20');
       
-      if (icon) {
-        iconContainer = document.createElement('div');
-        iconContainer.className = 'mb-4 text-primary transition-all duration-300 transform';
-        iconContainer.innerHTML = icon;
-        element.appendChild(iconContainer);
+      if (titleElement) {
+        titleElement.classList.add('gradient-text');
       }
       
-      titleElement = document.createElement('h3');
-      titleElement.className = 'text-lg font-semibold transition-all duration-300';
-      titleElement.textContent = title;
-      element.appendChild(titleElement);
-      
-      const descElement = document.createElement('p');
-      descElement.className = 'mt-2 text-muted-foreground';
-      descElement.textContent = description;
-      element.appendChild(descElement);
-      
-      progressBar = document.createElement('div');
-      progressBar.className = 'h-1 bg-gradient-to-r from-primary to-accent mt-4 transition-all duration-500 ease-out';
-      progressBar.style.width = '0';
-      element.appendChild(progressBar);
-      
-      containerElement.appendChild(element);
-    },
-    unmount: function() {
-      if (element) {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
-        element.removeEventListener('click', onClick);
-        
-        if (element.parentNode) {
-          element.parentNode.removeChild(element);
-        }
+      if (progressBar) {
+        progressBar.style.width = '100%';
       }
-    }
-  };
-}
-
-// For compatibility with the existing React structure
-function AnimatedCardReactWrapper(props) {
-  const divRef = React.useRef(null);
-  const cardRef = React.useRef(null);
-  
-  React.useEffect(() => {
-    if (divRef.current && !cardRef.current) {
-      cardRef.current = AnimatedCard(props);
-      cardRef.current.mount(divRef.current.parentNode);
-      divRef.current.remove();
-    }
-    
-    return () => {
-      if (cardRef.current) {
-        cardRef.current.unmount();
-        cardRef.current = null;
+      
+      if (iconContainer) {
+        iconContainer.style.transform = 'scale(1.1)';
       }
     };
-  }, [props.title, props.description, props.icon]);
+    
+    const handleMouseLeave = () => {
+      element.classList.remove('shadow-lg', 'border-primary/20');
+      
+      if (titleElement) {
+        titleElement.classList.remove('gradient-text');
+      }
+      
+      if (progressBar) {
+        progressBar.style.width = '0';
+      }
+      
+      if (iconContainer) {
+        iconContainer.style.transform = 'scale(1)';
+      }
+    };
+    
+    // Add event listeners
+    element.addEventListener('mouseenter', handleMouseEnter);
+    element.addEventListener('mouseleave', handleMouseLeave);
+    element.addEventListener('click', onClick);
+    
+    // Cleanup function
+    return () => {
+      element.removeEventListener('mouseenter', handleMouseEnter);
+      element.removeEventListener('mouseleave', handleMouseLeave);
+      element.removeEventListener('click', onClick);
+    };
+  }, [onClick]);
   
-  // Return a React element (not an object)
-  return React.createElement('div', {
-    ref: divRef,
-    className: `group p-6 rounded-lg border bg-card text-card-foreground shadow transition-all duration-300 ${props.className || ''}`,
-    style: { display: 'none' }
-  });
-}
+  return (
+    <div 
+      ref={containerRef}
+      className={`group p-6 rounded-lg border bg-card text-card-foreground shadow transition-all duration-300 hover-lift cursor-pointer ${className}`}
+    >
+      {icon && (
+        <div className="icon-container mb-4 text-primary transition-all duration-300 transform">
+          {icon}
+        </div>
+      )}
+      <h3 className="text-lg font-semibold transition-all duration-300">
+        {title}
+      </h3>
+      <p className="mt-2 text-muted-foreground">
+        {description}
+      </p>
+      <div 
+        className="progress-bar h-1 bg-gradient-to-r from-primary to-accent mt-4 transition-all duration-500 ease-out" 
+        style={{ width: '0' }}
+      />
+    </div>
+  );
+};
 
-export default AnimatedCardReactWrapper;
+export default AnimatedCard;

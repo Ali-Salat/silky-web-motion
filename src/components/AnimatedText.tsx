@@ -1,95 +1,73 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-// AnimatedText.tsx - Pure JavaScript approach with minimal React imports
-function AnimatedText(props) {
-  const { items = [], interval = 3000, className = '' } = props;
-  let currentIndex = 0;
-  let isVisible = true;
-  let intervalId = null;
-  let element = null;
+const AnimatedText: React.FC<{
+  items?: string[];
+  interval?: number;
+  className?: string;
+}> = ({ items = [], interval = 3000, className = '' }) => {
+  const containerRef = useRef<HTMLSpanElement | null>(null);
+  const currentIndexRef = useRef(0);
+  const elementRef = useRef<HTMLSpanElement | null>(null);
+  const intervalIdRef = useRef<number | null>(null);
   
-  function initialize() {
-    if (items.length <= 1) return;
+  useEffect(() => {
+    // Only set up animation if there are multiple items
+    if (items.length <= 1 || !containerRef.current) return;
     
-    intervalId = setInterval(() => {
+    // Create text element
+    const element = document.createElement('span');
+    element.className = `inline-block transition-all duration-300 ${className}`;
+    element.style.opacity = '1';
+    element.textContent = items[0] || '';
+    
+    // Save reference and add to DOM
+    elementRef.current = element;
+    containerRef.current.appendChild(element);
+    
+    // Animation functions
+    const fadeOut = () => {
+      if (!elementRef.current) return;
+      elementRef.current.style.opacity = '0';
+      elementRef.current.style.transform = 'translateY(8px)';
+    };
+    
+    const fadeIn = () => {
+      if (!elementRef.current) return;
+      elementRef.current.style.opacity = '1';
+      elementRef.current.style.transform = 'translateY(0)';
+    };
+    
+    const updateText = () => {
+      if (!elementRef.current) return;
+      elementRef.current.textContent = items[currentIndexRef.current];
+    };
+    
+    // Start animation cycle
+    intervalIdRef.current = window.setInterval(() => {
       fadeOut();
       
       setTimeout(() => {
-        currentIndex = (currentIndex + 1) % items.length;
+        currentIndexRef.current = (currentIndexRef.current + 1) % items.length;
         updateText();
         fadeIn();
       }, 300); // Wait for fade-out animation to complete
       
     }, interval);
     
-    return () => intervalId && clearInterval(intervalId);
-  }
-  
-  function fadeOut() {
-    if (!element) return;
-    element.style.opacity = '0';
-    element.style.transform = 'translateY(8px)';
-  }
-  
-  function fadeIn() {
-    if (!element) return;
-    element.style.opacity = '1';
-    element.style.transform = 'translateY(0)';
-  }
-  
-  function updateText() {
-    if (!element) return;
-    element.textContent = items[currentIndex];
-  }
-  
-  return {
-    mount: function(containerElement) {
-      element = document.createElement('span');
-      element.className = `inline-block transition-all duration-300 ${className}`;
-      element.style.opacity = '1';
-      element.textContent = items[currentIndex] || '';
-      
-      containerElement.appendChild(element);
-      initialize();
-    },
-    unmount: function() {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      if (element && element.parentNode) {
-        element.parentNode.removeChild(element);
-      }
-    }
-  };
-}
-
-// For compatibility with the existing React structure
-function AnimatedTextReactWrapper(props) {
-  const spanRef = React.useRef(null);
-  const animatedTextRef = React.useRef(null);
-  
-  React.useEffect(() => {
-    if (spanRef.current && !animatedTextRef.current) {
-      animatedTextRef.current = AnimatedText(props);
-      animatedTextRef.current.mount(spanRef.current.parentNode);
-      spanRef.current.remove();
-    }
-    
+    // Cleanup function
     return () => {
-      if (animatedTextRef.current) {
-        animatedTextRef.current.unmount();
-        animatedTextRef.current = null;
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+      if (elementRef.current && elementRef.current.parentNode) {
+        elementRef.current.parentNode.removeChild(elementRef.current);
       }
     };
-  }, [props.items, props.interval]);
+  }, [items, interval, className]);
   
-  // Return a React element (not an object)
-  return React.createElement('span', { 
-    ref: spanRef,
-    className: `inline-block transition-all duration-300 ${props.className || ''}`,
-    style: { opacity: 0 }
-  }, props.items && props.items[0] || '');
-}
+  // Return a placeholder that the effect will replace with the animated element
+  return <span ref={containerRef} className="inline-block">{items[0] || ''}</span>;
+};
 
-export default AnimatedTextReactWrapper;
+export default AnimatedText;
