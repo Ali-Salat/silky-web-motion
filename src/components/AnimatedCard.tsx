@@ -1,5 +1,7 @@
 
-// AnimatedCard.tsx - Pure JavaScript approach without imports
+import React from 'react';
+
+// AnimatedCard.tsx - Pure JavaScript approach with minimal React imports
 function AnimatedCard(props) {
   const { 
     title = '',
@@ -117,6 +119,7 @@ function AnimatedCardReactWrapper(props) {
     };
   }, [props.title, props.description, props.icon]);
   
+  // Return a React element (not an object)
   return React.createElement('div', {
     ref: divRef,
     className: `group p-6 rounded-lg border bg-card text-card-foreground shadow transition-all duration-300 ${props.className || ''}`,

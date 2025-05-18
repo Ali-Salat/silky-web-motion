@@ -1,5 +1,7 @@
 
-// AnimatedText.tsx - Pure JavaScript approach without imports
+import React from 'react';
+
+// AnimatedText.tsx - Pure JavaScript approach with minimal React imports
 function AnimatedText(props) {
   const { items = [], interval = 3000, className = '' } = props;
   let currentIndex = 0;
@@ -82,6 +84,7 @@ function AnimatedTextReactWrapper(props) {
     };
   }, [props.items, props.interval]);
   
+  // Return a React element (not an object)
   return React.createElement('span', { 
     ref: spanRef,
     className: `inline-block transition-all duration-300 ${props.className || ''}`,
