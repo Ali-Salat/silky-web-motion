@@ -68,9 +68,9 @@ const LoginForm = () => {
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <p className="text-sm text-blue-800 font-medium mb-2">Demo Credentials:</p>
             <div className="text-xs text-blue-700 space-y-1">
-              <p>Admin: admin@wajir.gov.ke / password</p>
-              <p>Agent: agent@wajir.gov.ke / password</p>
-              <p>User: user@wajir.gov.ke / password</p>
+              <p>Admin: admin@wajir.go.ke / password</p>
+              <p>Agent: agent@wajir.go.ke / password</p>
+              <p>User: user@wajir.go.ke / password</p>
             </div>
           </div>
         </CardContent>

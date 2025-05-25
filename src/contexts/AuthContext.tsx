@@ -16,21 +16,21 @@ const mockUsers: User[] = [
   {
     id: '1',
     name: 'Admin User',
-    email: 'admin@wajir.gov.ke',
+    email: 'admin@wajir.go.ke',
     role: 'admin',
     department: 'ICT Department'
   },
   {
     id: '2',
     name: 'Support Agent',
-    email: 'agent@wajir.gov.ke',
+    email: 'agent@wajir.go.ke',
     role: 'agent',
     department: 'ICT Department'
   },
   {
     id: '3',
     name: 'John Doe',
-    email: 'user@wajir.gov.ke',
+    email: 'user@wajir.go.ke',
     role: 'user',
     department: 'Finance Department'
   }
