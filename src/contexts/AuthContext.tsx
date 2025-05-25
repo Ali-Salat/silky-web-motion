@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '@/types/helpdesk';
 
@@ -15,7 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'Abdullah Hassan',
+    name: 'Mohamed Shahid',
     email: 'admin@wajir.go.ke',
     role: 'admin',
     department: 'ICT Department'
