@@ -20,37 +20,37 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="ict-header shadow-lg border-b border-slate-700">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Menu className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-xl font-semibold text-gray-900">Wajir County Help Desk</h1>
-              <p className="text-sm text-gray-500">{title}</p>
+              <h1 className="text-xl font-semibold text-white">Wajir County Help Desk</h1>
+              <p className="text-sm text-blue-200">{title}</p>
             </div>
           </div>
           
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Bell className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Settings className="h-5 w-5" />
             </Button>
             
             <div className="flex items-center space-x-3">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-gray-500 capitalize">{user?.role} • {user?.department}</p>
+                <p className="text-sm font-medium text-white">{user?.name}</p>
+                <p className="text-xs text-blue-200 capitalize">{user?.role} • {user?.department}</p>
               </div>
-              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-2 ring-white/20">
                 <User className="h-4 w-4 text-white" />
               </div>
-              <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <Button variant="ghost" size="icon" onClick={handleLogout} className="text-white hover:bg-white/10">
                 <LogOut className="h-5 w-5" />
               </Button>
             </div>
