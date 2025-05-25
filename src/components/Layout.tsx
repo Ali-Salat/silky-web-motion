@@ -28,9 +28,16 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <Menu className="h-5 w-5" />
             </Button>
-            <div>
-              <h1 className="text-xl font-semibold text-white">Wajir County Help Desk</h1>
-              <p className="text-sm text-blue-200">{title}</p>
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/4fe37f87-2261-4911-901f-5bb1d0b5fe60.png" 
+                alt="Wajir County Logo" 
+                className="h-12 w-12 object-contain"
+              />
+              <div>
+                <h1 className="text-xl font-semibold text-white">Wajir County Help Desk</h1>
+                <p className="text-sm text-blue-200">{title}</p>
+              </div>
             </div>
           </div>
           

@@ -15,21 +15,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'Admin User',
+    name: 'Abdullah Hassan',
     email: 'admin@wajir.go.ke',
     role: 'admin',
     department: 'ICT Department'
   },
   {
     id: '2',
-    name: 'Support Agent',
+    name: 'Fatima Mohamed',
     email: 'agent@wajir.go.ke',
     role: 'agent',
     department: 'ICT Department'
   },
   {
     id: '3',
-    name: 'John Doe',
+    name: 'Ahmed Ali',
     email: 'user@wajir.go.ke',
     role: 'user',
     department: 'Finance Department'

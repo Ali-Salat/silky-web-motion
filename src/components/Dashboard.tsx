@@ -26,7 +26,7 @@ const Dashboard = () => {
       title: 'Computer not starting',
       status: 'open',
       priority: 'high',
-      requester: 'Jane Smith',
+      requester: 'Amina Omar',
       createdAt: '2 hours ago'
     },
     {
@@ -34,7 +34,7 @@ const Dashboard = () => {
       title: 'Email access issues',
       status: 'in-progress',
       priority: 'medium',
-      requester: 'John Doe',
+      requester: 'Khalid Ibrahim',
       createdAt: '4 hours ago'
     },
     {
@@ -42,7 +42,7 @@ const Dashboard = () => {
       title: 'Printer not working',
       status: 'resolved',
       priority: 'low',
-      requester: 'Mary Johnson',
+      requester: 'Maryam Abdullah',
       createdAt: '1 day ago'
     }
   ];
