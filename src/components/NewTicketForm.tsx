@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,8 +26,8 @@ const NewTicketForm = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase
-        .from('tickets' as any)
+      const { data, error } = await (supabase as any)
+        .from('tickets')
         .insert({
           title,
           description,
