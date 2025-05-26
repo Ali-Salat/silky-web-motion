@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -42,7 +41,7 @@ const Dashboard = () => {
   const fetchTickets = async () => {
     try {
       const { data, error } = await supabase
-        .from('tickets')
+        .from('tickets' as any)
         .select(`
           id,
           title,
@@ -68,7 +67,7 @@ const Dashboard = () => {
   const fetchStats = async () => {
     try {
       const { data: allTickets, error } = await supabase
-        .from('tickets')
+        .from('tickets' as any)
         .select('status, requester_id, assigned_to');
 
       if (error) {
@@ -77,11 +76,11 @@ const Dashboard = () => {
       }
 
       const total = allTickets?.length || 0;
-      const open = allTickets?.filter(t => t.status === 'open').length || 0;
-      const inProgress = allTickets?.filter(t => t.status === 'in-progress').length || 0;
-      const resolved = allTickets?.filter(t => t.status === 'resolved').length || 0;
-      const myTickets = allTickets?.filter(t => t.requester_id === profile?.id).length || 0;
-      const assignedToMe = allTickets?.filter(t => t.assigned_to === profile?.id).length || 0;
+      const open = allTickets?.filter((t: any) => t.status === 'open').length || 0;
+      const inProgress = allTickets?.filter((t: any) => t.status === 'in-progress').length || 0;
+      const resolved = allTickets?.filter((t: any) => t.status === 'resolved').length || 0;
+      const myTickets = allTickets?.filter((t: any) => t.requester_id === profile?.id).length || 0;
+      const assignedToMe = allTickets?.filter((t: any) => t.assigned_to === profile?.id).length || 0;
 
       setStats({
         totalTickets: total,
