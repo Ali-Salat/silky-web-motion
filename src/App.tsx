@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "@/pages/Login";
 import DashboardPage from "@/pages/DashboardPage";
+import NewTicketPage from "@/pages/NewTicketPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,11 @@ const App = () => (
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/new-ticket" element={
+              <ProtectedRoute>
+                <NewTicketPage />
               </ProtectedRoute>
             } />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />

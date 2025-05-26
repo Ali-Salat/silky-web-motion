@@ -11,18 +11,18 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, title }) => {
-  const { user, logout } = useAuth();
+  const { profile, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
       {/* Header */}
-      <header className="ict-header shadow-lg border-b border-slate-700">
+      <header className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg border-b border-slate-700">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
@@ -51,8 +51,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             
             <div className="flex items-center space-x-3">
               <div className="text-right">
-                <p className="text-sm font-medium text-white">{user?.name}</p>
-                <p className="text-xs text-blue-200 capitalize">{user?.role} • {user?.department}</p>
+                <p className="text-sm font-medium text-white">{profile?.name}</p>
+                <p className="text-xs text-blue-200 capitalize">{profile?.role} • {profile?.department}</p>
               </div>
               <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-2 ring-white/20">
                 <User className="h-4 w-4 text-white" />
